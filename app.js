@@ -11,7 +11,7 @@ const itemAt=p=>items.find(it=>p>=it.p&&p<=it.e);
 // oblibene (ukladaji se jen v tomto telefonu)
 let favs=[];try{favs=JSON.parse(localStorage.getItem('fav')||'[]')}catch(e){}
 const saveFavs=()=>{try{localStorage.setItem('fav',JSON.stringify(favs))}catch(e){}};
-function tools(){const it=itemAt(cur),f=it&&favs.includes(it.p);const b=$('btnFav');b.disabled=!it;b.textContent=(f?'★':'☆')+' Oblíbené';b.classList.toggle('on',!!f)}
+function tools(){const it=itemAt(cur),f=it&&favs.includes(it.p);const b=$('btnFav');b.disabled=!it;b.textContent=f?'★ Uloženo':'☆ Uložit';b.classList.toggle('on',!!f);$('btnFavs').textContent='Oblíbené'+(favs.length?' '+favs.length:'')}
 function toast(t){const x=$('toast');x.textContent=t;x.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>x.hidden=true,2600)}
 function show(i,store=true){
   cur=Math.max(0,Math.min(N-1,i)); img.src='pages/p'+pad(cur)+'.webp';
@@ -57,7 +57,8 @@ $('prev').onclick=()=>show(cur-1);$('next').onclick=()=>show(cur+1);
 document.addEventListener('keydown',e=>{if(e.key=='ArrowRight')show(cur+1);if(e.key=='ArrowLeft')show(cur-1)});
 $('btnZoom').onclick=zoomText;
 $('btnFav').onclick=()=>{const it=itemAt(cur);if(!it)return;const i=favs.indexOf(it.p);
-  if(i>=0){favs.splice(i,1);toast('Odebráno z oblíbených')}else{favs.push(it.p);toast('Přidáno do oblíbených')}saveFavs();tools()};
+  if(i>=0){favs.splice(i,1);toast('Odebráno z oblíbených')}else{favs.push(it.p);toast('Uloženo ★ ('+favs.length+')')}saveFavs();tools()};
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 $('btnShare').onclick=async()=>{const it=itemAt(cur),url=location.href.split('#')[0]+'#'+(cur+1),title=it?it.t:'Kuchařka pro Nikču a Leu';
   try{if(navigator.share){await navigator.share({title,url});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(url);toast('Odkaz zkopírován')}catch(e){toast(url)}};
@@ -70,7 +71,11 @@ const row=k=>`<div class="row"><a href="#${k[1]+1}" data-p="${k[1]}">${k[0]}<spa
 const sec=(t,k,cls='')=>`<section class="ch ${cls}"><button class="chh" aria-expanded="false"><span>${t}</span><small>${k.length}</small></button><div class="chl" hidden>`+k.map(row).join('')+`</div></section>`;
 function buildMenu(){const fv=favs.map(p=>items.find(it=>it.p===p)).filter(Boolean).map(it=>[it.t,it.p]);
   mi.innerHTML=(fv.length?sec('★ Moje oblíbené',fv,'favs'):'')+D.chapters.filter(c=>c.k.length).map(c=>sec(c.t,c.k)).join('')}
-mi.addEventListener('click',e=>{const a=e.target.closest('a');if(a){e.preventDefault();menu.hidden=true;show(+a.dataset.p);return}
+function favView(){const fv=favs.map(p=>items.find(it=>it.p===p)).filter(Boolean);
+  mi.innerHTML='<h3 class="fh">★ Moje oblíbené</h3>'+(fv.length?fv.map(it=>`<div class="row"><a href="#${it.p+1}" data-p="${it.p}">${it.t}<span>${D.labels[it.p]||''}</span></a><button class="rm" data-p="${it.p}" aria-label="Odebrat">✕</button></div>`).join(''):'<p class="empty">Zatím tu nic není. U receptu klepni dole na ☆ Uložit.</p>')}
+$('btnFavs').onclick=()=>{favView();menu.hidden=false};
+mi.addEventListener('click',e=>{const r=e.target.closest('.rm');if(r){favs=favs.filter(p=>p!==+r.dataset.p);saveFavs();tools();favView();return}
+const a=e.target.closest('a');if(a){e.preventDefault();menu.hidden=true;show(+a.dataset.p);return}
   const h=e.target.closest('.chh');if(!h)return;const open=h.getAttribute('aria-expanded')=='true';
   mi.querySelectorAll('.chh').forEach(x=>{x.setAttribute('aria-expanded','false');x.nextElementSibling.hidden=true});
   if(!open){h.setAttribute('aria-expanded','true');h.nextElementSibling.hidden=false;h.scrollIntoView({block:'nearest'})}});
