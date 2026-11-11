@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kuchařka pro Nikču a Leu</title>
+<meta name="theme-color" content="#4D6240">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kuchařka">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header id="bar">
+  <button id="btnHome" aria-label="Hlavní strana">⌂ Hlavní strana</button>
+  <button id="btnMenu" aria-label="Recepty">Recepty ▾</button>
+  <span id="lbl"></span>
+</header>
+<main id="stage"><div id="sheet"><img id="img" alt="" draggable="false"><div id="hot"></div></div></main>
+<button id="prev" class="nav" aria-label="Předchozí strana">‹</button>
+<button id="next" class="nav" aria-label="Další strana">›</button>
+<footer id="tools">
+  <button id="btnFav">☆ Oblíbené</button>
+  <button id="btnZoom">⤢ Přiblížit</button>
+  <button id="btnShare">↗ Sdílet</button>
+</footer>
+<div id="toast" hidden></div>
+<div id="menu" hidden><div id="menuIn"></div></div>
+<script src="app.js"></script></body></html>
