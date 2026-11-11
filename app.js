@@ -70,7 +70,8 @@ document.addEventListener('pointerdown',keepAwake,{once:true});
 const row=k=>`<div class="row"><a href="#${k[1]+1}" data-p="${k[1]}">${k[0]}<span>${(D.labels[k[1]]||'')}</span></a></div>`;
 const sec=(t,k,cls='')=>`<section class="ch ${cls}"><button class="chh" aria-expanded="false"><span>${t}</span><small>${k.length}</small></button><div class="chl" hidden>`+k.map(row).join('')+`</div></section>`;
 function buildMenu(){const fv=favs.map(p=>items.find(it=>it.p===p)).filter(Boolean).map(it=>[it.t,it.p]);
-  mi.innerHTML=(fv.length?sec('★ Moje oblíbené',fv,'favs'):'')+D.chapters.filter(c=>c.k.length).map(c=>sec(c.t,c.k)).join('')}
+  const pk=(D.poklady||[]).map(p=>items.find(it=>it.p===p)).filter(Boolean).map(it=>[it.t,it.p]);
+  mi.innerHTML=(fv.length?sec('★ Moje oblíbené',fv,'favs'):'')+(pk.length?sec('♥ Rodinné poklady',pk,'poklady'):'')+D.chapters.filter(c=>c.k.length).map(c=>sec(c.t,c.k)).join('')}
 function favView(){const fv=favs.map(p=>items.find(it=>it.p===p)).filter(Boolean);
   mi.innerHTML='<h3 class="fh">★ Moje oblíbené</h3>'+(fv.length?fv.map(it=>`<div class="row"><a href="#${it.p+1}" data-p="${it.p}">${it.t}<span>${D.labels[it.p]||''}</span></a><button class="rm" data-p="${it.p}" aria-label="Odebrat">✕</button></div>`).join(''):'<p class="empty">Zatím tu nic není. U receptu klepni dole na ☆ Uložit.</p>')}
 $('btnFavs').onclick=()=>{favView();menu.hidden=false};

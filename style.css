@@ -41,3 +41,4 @@ html,body{margin:0;height:100%;background:#E9E1D0;color:var(--b);font-family:Geo
 #menuIn .rm{flex:none;align-self:center;width:36px;height:36px;margin-right:6px;border:0;border-radius:10px;background:#EFE5D0;color:var(--b);font-size:16px}
 #tools button{padding:0 4px}
 @media (max-width:360px){#tools{gap:6px;padding-left:6px;padding-right:6px}#tools button{font-size:12.5px}}
+#menuIn .poklady .chh{color:#7A2345}#menuIn .poklady .row a{color:#7A2345}
