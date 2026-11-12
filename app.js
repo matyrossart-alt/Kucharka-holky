@@ -83,5 +83,5 @@ const a=e.target.closest('a');if(a){e.preventDefault();menu.hidden=true;show(+a.
 $('btnMenu').onclick=()=>{buildMenu();menu.hidden=false};menu.addEventListener('click',e=>{if(e.target===menu)menu.hidden=true});
 let s0=0;const h=parseInt(location.hash.slice(1));try{s0=h?h-1:(+localStorage.getItem('page')||0)}catch(e){s0=h?h-1:0}
 show(s0);
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl){rl=true;location.reload()}});navigator.serviceWorker.register('sw.js').then(r=>r.update&&r.update())}
 })();
